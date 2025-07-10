@@ -49,18 +49,8 @@ public class PetSpellBlockerPlugin extends Plugin
             return;
         }
 
-        // Get NPCs from the scene
-        java.util.List<NPC> npcs = client.getNpcs();
-        
-        NPC npc = null;
-        for (NPC n : npcs)
-        {
-            if (n.getIndex() == npcIndex)
-            {
-                npc = n;
-                break;
-            }
-        }
+        // Get NPC from the scene using the new API
+        NPC npc = client.getTopLevelWorldView().npcs().byIndex(npcIndex);
         
         if (npc == null)
         {
@@ -71,15 +61,9 @@ public class PetSpellBlockerPlugin extends Plugin
         NPCComposition comp = npc.getComposition();
         if (comp != null && comp.isFollower())
         {
-            // Remove the menu entry by replacing the menu entries array without this entry
-            MenuEntry[] entries = client.getMenuEntries();
-            if (entries.length > 0)
-            {
-                MenuEntry[] newEntries = new MenuEntry[entries.length - 1];
-                System.arraycopy(entries, 0, newEntries, 0, entries.length - 1);
-                client.setMenuEntries(newEntries);
-                log.debug("Removed spell cast menu entry for pet: {}", npc.getName());
-            }
+            // Remove the menu entry using the new API
+            client.removeMenuEntry(event.getMenuEntry());
+            log.debug("Removed spell cast menu entry for pet: {}", npc.getName());
         }
     }
 } 
