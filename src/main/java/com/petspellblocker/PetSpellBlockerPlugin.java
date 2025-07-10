@@ -62,7 +62,8 @@ public class PetSpellBlockerPlugin extends Plugin
         if (comp != null && comp.isFollower())
         {
             // Remove the menu entry using the new API
-            client.removeMenuEntry(event.getMenuEntry());
+            // Use the new Menu API to remove the entry
+            client.getMenu().removeMenuEntry(event.getMenuEntry());
             log.debug("Removed spell cast menu entry for pet: {}", npc.getName());
         }
     }
