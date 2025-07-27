@@ -1,13 +1,13 @@
-package com.petspellblocker;
+package com.pkqol;
 
 import net.runelite.client.RuneLite;
 import net.runelite.client.externalplugins.ExternalPluginManager;
 
-public class PetSpellBlockerPluginTest
+public class PKQoLPluginTest
 {
     public static void main(String[] args) throws Exception
     {
-        ExternalPluginManager.loadBuiltin(PetSpellBlockerPlugin.class);
+        ExternalPluginManager.loadBuiltin(PKQoLPlugin.class);
         RuneLite.main(args);
     }
 } 

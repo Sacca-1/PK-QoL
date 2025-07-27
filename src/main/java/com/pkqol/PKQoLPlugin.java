@@ -6,7 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.NPC;
 import net.runelite.api.NPCComposition;
+import net.runelite.api.WorldType;
 import net.runelite.api.events.MenuEntryAdded;
+import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
@@ -31,24 +33,56 @@ public class PKQoLPlugin extends Plugin
     @Override
     protected void startUp()
     {
-        log.debug("PK QoL started");
+        // Plugin started
     }
 
     @Override
     protected void shutDown()
     {
-        log.debug("PK QoL stopped");
+        // Plugin stopped
     }
 
     @Subscribe
     public void onMenuEntryAdded(MenuEntryAdded event)
     {
-        // Check if pet spell blocker is enabled
-        if (!config.petSpellBlocker())
+
+        if (config.petSpellBlocker())
+        {
+            handlePetSpellBlock(event);
+        }
+    }
+
+    @Subscribe
+    public void onMenuOptionClicked(MenuOptionClicked event)
+    {
+        // Intercept left-click "Use" on vial and cancel it (do nothing)
+        if (!config.emptyVialBlocker())
         {
             return;
         }
 
+        // Only on dangerous areas
+        if (!inDangerousArea())
+        {
+            return;
+        }
+
+        // Check if the clicked option is "Use" on a vial item
+        if ("Use".equals(event.getMenuEntry().getOption()))
+        {
+            int itemId = event.getMenuEntry().getIdentifier();
+            boolean isVial = itemId == 229; // Empty vial ID
+            boolean targetContainsVial = event.getMenuEntry().getTarget() != null && event.getMenuEntry().getTarget().contains("Vial");
+            if (isVial || targetContainsVial)
+            {
+                event.consume(); // Cancels the action, effectively doing nothing
+            }
+        }
+    }
+
+    private void handlePetSpellBlock(MenuEntryAdded event)
+    {
+        
         // Check if this is a spell cast action
         if (!"Cast".equals(event.getOption()))
         {
@@ -77,8 +111,32 @@ public class PKQoLPlugin extends Plugin
             // Remove the menu entry using the new API
             // Use the new Menu API to remove the entry
             client.getMenu().removeMenuEntry(event.getMenuEntry());
-            log.debug("Removed spell cast menu entry for pet: {}", npc.getName());
         }
+    }
+
+    private boolean inDangerousArea()
+    {
+        // Check if in wilderness
+        int wildernessVarbit = client.getVarbitValue(5963); // IN_WILDERNESS varbit ID
+        boolean inWilderness = wildernessVarbit == 1;
+        
+        if (inWilderness)
+        {
+            return true;
+        }
+
+        // Check world types
+        for (WorldType worldType : client.getWorldType())
+        {
+            if (worldType == WorldType.PVP || 
+                worldType == WorldType.DEADMAN ||
+                worldType == WorldType.HIGH_RISK)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Provides

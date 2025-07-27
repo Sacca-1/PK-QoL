@@ -15,4 +15,14 @@ public interface PKQoLConfig extends Config {
     default boolean petSpellBlocker() {
         return true;
     }
+
+    @ConfigItem(
+        keyName = "emptyVialBlocker",
+        name = "Empty Vial Blocker",
+        description = "Consumes the Use option on empty vials while in dangerous areas to avoid misclicks",
+        position = 2
+    )
+    default boolean emptyVialBlocker() {
+        return false;
+    }
 } 
