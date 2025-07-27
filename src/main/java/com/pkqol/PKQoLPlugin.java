@@ -33,13 +33,14 @@ public class PKQoLPlugin extends Plugin
     @Override
     protected void startUp()
     {
-        // Plugin started
+        log.debug("Pet Spell Blocker enabled: {}", config.petSpellBlocker());
+        log.debug("Empty Vial Blocker enabled: {}", config.emptyVialBlocker());
     }
 
     @Override
     protected void shutDown()
     {
-        // Plugin stopped
+        log.debug("PK QoL stopped");
     }
 
     @Subscribe
@@ -111,6 +112,7 @@ public class PKQoLPlugin extends Plugin
             // Remove the menu entry using the new API
             // Use the new Menu API to remove the entry
             client.getMenu().removeMenuEntry(event.getMenuEntry());
+            log.debug("Removed spell cast menu entry for pet: {}", npc.getName());
         }
     }
 
