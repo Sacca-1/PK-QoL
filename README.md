@@ -14,6 +14,12 @@ A RuneLite plugin that provides quality of life improvements for PKing.
 * Can be enabled/disabled in the plugin configuration
 * Disabled by default
 
+### NPC Spell Blocker
+* Removes "Cast" menu entries on NPCs while in dangerous areas (wilderness, PvP worlds, Deadman worlds)
+* **Warning**: This removes the option to cast spells on NPCs altogether, so make sure you only enable this if you're sure you don't want to cast spells on NPCs
+* Can be enabled/disabled in the plugin configuration
+* Disabled by default
+
 ## Future Features
 
 This plugin is designed to be expandable with additional PK-related quality of life features. Feel free to open an issue if you have any ideas!
