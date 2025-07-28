@@ -26,7 +26,7 @@ dependencies {
 	testImplementation group: 'net.runelite', name:'jshell', version: runeLiteVersion
 }
 
-group = 'com.pkqol'
+group = 'com.wildyqol'
 version = '1.1.0'
 
 tasks.withType(JavaCompile).configureEach {
@@ -37,7 +37,7 @@ tasks.withType(JavaCompile).configureEach {
 tasks.register('shadowJar', Jar) {
 	dependsOn configurations.testRuntimeClasspath
 	manifest {
-		attributes('Main-Class': 'com.pkqol.PKQoLPluginTest', 'Multi-Release': true)
+		attributes('Main-Class': 'com.wildyqol.WildyQoLPluginTest', 'Multi-Release': true)
 	}
 
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE

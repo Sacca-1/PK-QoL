@@ -1,4 +1,4 @@
-package com.pkqol;
+package com.wildyqol;
 
 import com.google.inject.Provides;
 import javax.inject.Inject;
@@ -9,17 +9,22 @@ import net.runelite.api.NPCComposition;
 import net.runelite.api.WorldType;
 import net.runelite.api.events.MenuEntryAdded;
 import net.runelite.api.events.MenuOptionClicked;
+import net.runelite.api.events.GameStateChanged;
+import net.runelite.api.GameState;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.config.ConfigManager;
+import net.runelite.client.chat.ChatMessageManager;
+import net.runelite.client.chat.QueuedMessage;
+import net.runelite.api.ChatMessageType;
 
 @Slf4j
 @PluginDescriptor(
-        name = "PK QoL",
-        description = "Quality of life improvements for PKing"
+        name = "Wildy QoL",
+        description = "Quality of life improvements for wilderness activities"
 )
-public class PKQoLPlugin extends Plugin
+public class WildyQoLPlugin extends Plugin
 {
     @Inject
     private Client client;
@@ -28,7 +33,12 @@ public class PKQoLPlugin extends Plugin
     private ConfigManager configManager;
 
     @Inject
-    private PKQoLConfig config;
+    private WildyQoLConfig config;
+
+    @Inject
+    private ChatMessageManager chatMessageManager;
+
+    private boolean shouldShowUpdateMessage = false;
 
     @Override
     protected void startUp()
@@ -36,12 +46,35 @@ public class PKQoLPlugin extends Plugin
         log.debug("Pet Spell Blocker enabled: {}", config.petSpellBlocker());
         log.debug("Empty Vial Blocker enabled: {}", config.emptyVialBlocker());
         log.debug("NPC Spell Blocker enabled: {}", config.npcSpellBlocker());
+        
+        // Check if we should show update message (but don't show it yet)
+        if (!config.updateMessageShown110())
+        {
+            shouldShowUpdateMessage = true;
+        }
     }
 
     @Override
     protected void shutDown()
     {
-        log.debug("PK QoL stopped");
+        log.debug("Wildy QoL stopped");
+    }
+
+    @Subscribe
+    public void onGameStateChanged(GameStateChanged gameStateChanged)
+    {
+        if (gameStateChanged.getGameState() != GameState.LOGGED_IN)
+        {
+            return;
+        }
+
+        // Show update message if needed
+        if (shouldShowUpdateMessage)
+        {
+            showUpdateMessage();
+            configManager.setConfiguration("wildyqol", "updateMessageShown110", true);
+            shouldShowUpdateMessage = false;
+        }
     }
 
     @Subscribe
@@ -77,10 +110,8 @@ public class PKQoLPlugin extends Plugin
         // Check if the clicked option is "Use" on a vial item
         if ("Use".equals(event.getMenuEntry().getOption()))
         {
-            int itemId = event.getMenuEntry().getIdentifier();
-            boolean isVial = itemId == 229; // Empty vial ID
             boolean targetContainsVial = event.getMenuEntry().getTarget() != null && event.getMenuEntry().getTarget().contains("Vial");
-            if (isVial || targetContainsVial)
+            if (targetContainsVial)
             {
                 event.consume(); // Cancels the action, effectively doing nothing
             }
@@ -187,9 +218,17 @@ public class PKQoLPlugin extends Plugin
         return false;
     }
 
-    @Provides
-    PKQoLConfig provideConfig(ConfigManager configManager)
+    private void showUpdateMessage()
     {
-        return configManager.getConfig(PKQoLConfig.class);
+        chatMessageManager.queue(QueuedMessage.builder()
+            .type(ChatMessageType.GAMEMESSAGE)
+            .runeLiteFormattedMessage("<col=00ff00>Wildy QoL v1.1.0:</col> Pet Spell Blocker plugin name changed to \"Wildy QoL\" with two added features: NPC Spell Blocker and Empty Vial Blocker.")
+            .build());
+    }
+
+    @Provides
+    WildyQoLConfig provideConfig(ConfigManager configManager)
+    {
+        return configManager.getConfig(WildyQoLConfig.class);
     }
 } 
