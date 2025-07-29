@@ -41,22 +41,11 @@ public interface WildyQoLConfig extends Config
 	}
 
 	@ConfigItem(
-		keyName = "rightClickAttackFc",
-		name = "Right-click attack FC",
-		description = "Deprioritise the 'Attack' option on Friends-Chat members",
-		position = 4
-	)
-	default boolean rightClickAttackFc()
-	{
-		return false;
-	}
-
-	@ConfigItem(
 		keyName = "updateMessageShown110",
 		name = "Update Message Shown v1.1.0",
 		description = "Internal flag to track if the v1.1.0 update message has been shown",
 		hidden = true,
-        position = 5
+        position = 4
 	)
 	default boolean updateMessageShown110()
 	{

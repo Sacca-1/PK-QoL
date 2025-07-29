@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.NPC;
 import net.runelite.api.NPCComposition;
-import net.runelite.api.Player;
 import net.runelite.api.WorldType;
 import net.runelite.api.events.MenuEntryAdded;
 import net.runelite.api.events.MenuOptionClicked;
@@ -47,7 +46,6 @@ public class WildyQoLPlugin extends Plugin
         log.debug("Pet Spell Blocker enabled: {}", config.petSpellBlocker());
         log.debug("Empty Vial Blocker enabled: {}", config.emptyVialBlocker());
         log.debug("NPC Spell Blocker enabled: {}", config.npcSpellBlocker());
-        log.debug("Right-click attack FC enabled: {}", config.rightClickAttackFc());
         
         // Check if we should show update message (but don't show it yet)
         if (!config.updateMessageShown110())
@@ -91,11 +89,6 @@ public class WildyQoLPlugin extends Plugin
         if (config.npcSpellBlocker())
         {
             handleNpcSpellBlock(event);
-        }
-
-        if (config.rightClickAttackFc())
-        {
-            handleRightClickAttackFc(event);
         }
     }
 
@@ -198,32 +191,6 @@ public class WildyQoLPlugin extends Plugin
         // Remove the menu entry using the new API
         client.getMenu().removeMenuEntry(event.getMenuEntry());
         log.debug("Removed spell cast menu entry for NPC: {}", npc.getName());
-    }
-
-    private void handleRightClickAttackFc(MenuEntryAdded event)
-    {
-        if (!"Attack".equals(event.getOption()))
-        {
-            return;
-        }
-
-        int idx = event.getIdentifier();
-        if (idx < 0)
-        {
-            return;
-        }
-
-        Player target = client.getTopLevelWorldView().players().byIndex(idx);
-        if (target == null || target == client.getLocalPlayer())
-        {
-            return;               // safety
-        }
-
-        if (target.isFriendsChatMember())
-        {
-            event.getMenuEntry().setDeprioritized(true);
-            log.debug("Deprioritized attack menu entry for FC member: {}", target.getName());
-        }
     }
 
     private boolean inDangerousArea()
