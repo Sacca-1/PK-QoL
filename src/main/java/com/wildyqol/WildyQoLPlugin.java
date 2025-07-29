@@ -45,7 +45,6 @@ public class WildyQoLPlugin extends Plugin
     {
         log.debug("Pet Spell Blocker enabled: {}", config.petSpellBlocker());
         log.debug("Empty Vial Blocker enabled: {}", config.emptyVialBlocker());
-        log.debug("NPC Spell Blocker enabled: {}", config.npcSpellBlocker());
         
         // Check if we should show update message (but don't show it yet)
         if (!config.updateMessageShown110())
@@ -84,11 +83,6 @@ public class WildyQoLPlugin extends Plugin
         if (config.petSpellBlocker())
         {
             handlePetSpellBlock(event);
-        }
-
-        if (config.npcSpellBlocker())
-        {
-            handleNpcSpellBlock(event);
         }
     }
 
@@ -153,46 +147,6 @@ public class WildyQoLPlugin extends Plugin
         }
     }
 
-    private void handleNpcSpellBlock(MenuEntryAdded event)
-    {
-        // Ensure this is a spell cast action
-        if (!"Cast".equals(event.getOption()))
-        {
-            return;
-        }
-
-        // Only remove in dangerous areas
-        if (!inDangerousArea())
-        {
-            return;
-        }
-
-        // Resolve NPC by index
-        int npcIndex = event.getIdentifier();
-        if (npcIndex < 0)
-        {
-            return;
-        }
-
-        NPC npc = client.getTopLevelWorldView().npcs().byIndex(npcIndex);
-
-        if (npc == null)
-        {
-            return;
-        }
-
-        // Skip followers (pets) – handled by petSpellBlocker
-        NPCComposition comp = npc.getComposition();
-        if (comp != null && comp.isFollower())
-        {
-            return;
-        }
-
-        // Remove the menu entry using the new API
-        client.getMenu().removeMenuEntry(event.getMenuEntry());
-        log.debug("Removed spell cast menu entry for NPC: {}", npc.getName());
-    }
-
     private boolean inDangerousArea()
     {
         // Check if in wilderness
@@ -222,7 +176,7 @@ public class WildyQoLPlugin extends Plugin
     {
         chatMessageManager.queue(QueuedMessage.builder()
             .type(ChatMessageType.GAMEMESSAGE)
-            .runeLiteFormattedMessage("<col=00ff00>Wildy QoL v1.1.0:</col> Pet Spell Blocker plugin name changed to \"Wildy QoL\" with two added features: NPC Spell Blocker and Empty Vial Blocker.")
+            .runeLiteFormattedMessage("<col=00ff00>Wildy QoL v1.1.0:</col> Pet Spell Blocker plugin name changed to \"Wildy QoL\" with added feature: Empty Vial Blocker.")
             .build());
     }
 

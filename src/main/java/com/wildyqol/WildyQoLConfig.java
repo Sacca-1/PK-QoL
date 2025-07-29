@@ -19,21 +19,10 @@ public interface WildyQoLConfig extends Config
 	}
 
 	@ConfigItem(
-		keyName = "npcSpellBlocker",
-		name = "NPC Spell Blocker",
-		description = "Removes 'Cast' menu entries on NPCs in dangerous areas",
-		position = 2
-	)
-	default boolean npcSpellBlocker()
-	{
-		return false;
-	}
-
-	@ConfigItem(
 		keyName = "emptyVialBlocker",
 		name = "Empty Vial Blocker",
 		description = "Prevents left-clicking 'Use' on empty vials in dangerous areas",
-		position = 3
+		position = 2
 	)
 	default boolean emptyVialBlocker()
 	{
@@ -45,7 +34,7 @@ public interface WildyQoLConfig extends Config
 		name = "Update Message Shown v1.1.0",
 		description = "Internal flag to track if the v1.1.0 update message has been shown",
 		hidden = true,
-        position = 4
+        position = 3
 	)
 	default boolean updateMessageShown110()
 	{
