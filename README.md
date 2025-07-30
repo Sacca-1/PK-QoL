@@ -10,6 +10,13 @@ A RuneLite plugin that provides quality of life improvements for wilderness acti
 ### Empty Vial Blocker
 * Prevents left-clicking "Use" on empty vials while in dangerous areas (wilderness, PvP worlds, Deadman worlds)
 
+### Friends Chat Cache
+* Caches friends chat members to prevent them from showing as enemies when hopping worlds
+* Configurable cache duration (1-30 minutes, default 5 minutes)
+* Customizable color for cached players (default: purple #AA00FF, same as Player Indicators)
+* Automatically refreshes cache when players join friends chat
+* Disabled by default - enable in plugin settings
+
 ## Future Features
 
 This plugin is designed to be expandable with additional wildy-related quality of life features. Feel free to open an issue if you have any ideas!

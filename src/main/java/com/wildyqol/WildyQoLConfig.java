@@ -3,6 +3,10 @@ package com.wildyqol;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
+import net.runelite.client.config.Range;
+import net.runelite.client.config.Alpha;
+
+import java.awt.Color;
 
 @ConfigGroup("wildyqol")
 public interface WildyQoLConfig extends Config
@@ -39,5 +43,40 @@ public interface WildyQoLConfig extends Config
 	default boolean updateMessageShown110()
 	{
 		return false;
+	}
+
+	@ConfigItem(
+		keyName = "enableFcCache",
+		name = "Cache friends-chat players",
+		description = "Treat recently-seen FC members as FC on world hop",
+		position = 4
+	)
+	default boolean enableFcCache()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		keyName = "fcCacheMinutes",
+		name = "Cache duration (minutes)",
+		description = "How long to remember FC members after world hop",
+		position = 5
+	)
+	@Range(min = 1, max = 30)
+	default int fcCacheMinutes()
+	{
+		return 5;
+	}
+
+	@Alpha
+	@ConfigItem(
+		keyName = "fcCacheColor",
+		name = "Friends chat cache color",
+		description = "Color to use for cached friends chat members",
+		position = 6
+	)
+	default Color fcCacheColor()
+	{
+		return new Color(170, 0, 255); // #AA00FF, same as Player Indicators default
 	}
 } 
