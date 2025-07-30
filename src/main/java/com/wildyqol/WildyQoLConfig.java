@@ -4,9 +4,6 @@ import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
 import net.runelite.client.config.Range;
-import net.runelite.client.config.Alpha;
-
-import java.awt.Color;
 
 @ConfigGroup("wildyqol")
 public interface WildyQoLConfig extends Config
@@ -68,15 +65,5 @@ public interface WildyQoLConfig extends Config
 		return 5;
 	}
 
-	@Alpha
-	@ConfigItem(
-		keyName = "fcCacheColor",
-		name = "Friends chat cache color",
-		description = "Color to use for cached friends chat members",
-		position = 6
-	)
-	default Color fcCacheColor()
-	{
-		return new Color(170, 0, 255); // #AA00FF, same as Player Indicators default
-	}
+
 } 

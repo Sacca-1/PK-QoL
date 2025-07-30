@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.Player;
 import net.runelite.client.config.ConfigManager;
+import net.runelite.client.plugins.playerindicators.PlayerIndicatorsConfig;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayPosition;
 
@@ -47,8 +48,9 @@ public class FcCacheOverlay extends Overlay
 			return null;
 		}
 
-		// Use the color from our config
-		Color fcColor = config.fcCacheColor();
+		// Get the friends chat color from Player Indicators config
+		PlayerIndicatorsConfig piConfig = configManager.getConfig(PlayerIndicatorsConfig.class);
+		Color fcColor = piConfig.getFriendsChatMemberColor();
 
 		Player localPlayer = client.getLocalPlayer();
 		for (Player player : client.getTopLevelWorldView().players())
