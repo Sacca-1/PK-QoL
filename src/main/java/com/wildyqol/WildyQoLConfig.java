@@ -59,10 +59,10 @@ public interface WildyQoLConfig extends Config
 		description = "How long to remember FC members after world hop",
 		position = 5
 	)
-	@Range(min = 1, max = 30)
+	@Range(min = 1)
 	default int fcCacheMinutes()
 	{
-		return 5;
+		return 10;
 	}
 
 
