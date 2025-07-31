@@ -82,6 +82,7 @@ public class FcCacheOverlay extends Overlay
 			piConfig.highlightPartyMembers(),
 			piConfig.highlightFriends(),
 			piConfig.highlightFriendsChat(),
+			piConfig.highlightOthers(),
 			piConfig.getFriendsChatMemberColor()
 		);
 		currentSnapshot.set(snapshot);
@@ -162,21 +163,8 @@ public class FcCacheOverlay extends Overlay
 
 	private boolean shouldRenderAsFc(Player player, PiSnapshot snapshot)
 	{
-		// Check if Player Indicators will draw friends chat
-		if (snapshot.getFc() == PlayerIndicatorsConfig.HighlightSetting.DISABLED)
-		{
-			return false;
-		}
-
 		// Check if we're in PvP area (for PVP setting)
 		boolean inPvpArea = isInPvpArea();
-		boolean fcEnabled = snapshot.getFc() == PlayerIndicatorsConfig.HighlightSetting.ENABLED ||
-			(snapshot.getFc() == PlayerIndicatorsConfig.HighlightSetting.PVP && inPvpArea);
-
-		if (!fcEnabled)
-		{
-			return false;
-		}
 
 		// Check if higher priority indicators would override
 		if (snapshot.getParty() != PlayerIndicatorsConfig.HighlightSetting.DISABLED)
@@ -199,7 +187,28 @@ public class FcCacheOverlay extends Overlay
 			}
 		}
 
-		return true;
+		// Check if FC is enabled
+		boolean fcEnabled = snapshot.getFc() == PlayerIndicatorsConfig.HighlightSetting.ENABLED ||
+			(snapshot.getFc() == PlayerIndicatorsConfig.HighlightSetting.PVP && inPvpArea);
+
+		if (fcEnabled)
+		{
+			return true;
+		}
+
+		// FC is turned off, but "others" is turned on, or PVP (while in PvP area)
+		if (snapshot.getFc() == PlayerIndicatorsConfig.HighlightSetting.DISABLED)
+		{
+			boolean othersEnabled = snapshot.getOthers() == PlayerIndicatorsConfig.HighlightSetting.ENABLED ||
+				(snapshot.getOthers() == PlayerIndicatorsConfig.HighlightSetting.PVP && inPvpArea);
+			
+			if (othersEnabled)
+			{
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	private boolean isInPvpArea()
@@ -281,12 +290,14 @@ public class FcCacheOverlay extends Overlay
 		private final PlayerIndicatorsConfig.HighlightSetting party;
 		private final PlayerIndicatorsConfig.HighlightSetting friends;
 		private final PlayerIndicatorsConfig.HighlightSetting fc;
+		private final PlayerIndicatorsConfig.HighlightSetting others;
 		private final Color fcColor;
 
 		public PiSnapshot(boolean drawTiles, PlayerNameLocation namePos,
 						 PlayerIndicatorsConfig.HighlightSetting party,
 						 PlayerIndicatorsConfig.HighlightSetting friends,
 						 PlayerIndicatorsConfig.HighlightSetting fc,
+						 PlayerIndicatorsConfig.HighlightSetting others,
 						 Color fcColor)
 		{
 			this.drawTiles = drawTiles;
@@ -294,14 +305,43 @@ public class FcCacheOverlay extends Overlay
 			this.party = party;
 			this.friends = friends;
 			this.fc = fc;
+			this.others = others;
 			this.fcColor = fcColor;
 		}
 
-		public boolean isDrawTiles() { return drawTiles; }
-		public PlayerNameLocation getNamePos() { return namePos; }
-		public PlayerIndicatorsConfig.HighlightSetting getParty() { return party; }
-		public PlayerIndicatorsConfig.HighlightSetting getFriends() { return friends; }
-		public PlayerIndicatorsConfig.HighlightSetting getFc() { return fc; }
-		public Color getFcColor() { return fcColor; }
+		public boolean isDrawTiles()
+		{
+			return drawTiles;
+		}
+
+		public PlayerNameLocation getNamePos()
+		{
+			return namePos;
+		}
+
+		public PlayerIndicatorsConfig.HighlightSetting getParty()
+		{
+			return party;
+		}
+
+		public PlayerIndicatorsConfig.HighlightSetting getFriends()
+		{
+			return friends;
+		}
+
+		public PlayerIndicatorsConfig.HighlightSetting getFc()
+		{
+			return fc;
+		}
+
+		public PlayerIndicatorsConfig.HighlightSetting getOthers()
+		{
+			return others;
+		}
+
+		public Color getFcColor()
+		{
+			return fcColor;
+		}
 	}
 } 

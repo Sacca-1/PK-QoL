@@ -67,7 +67,7 @@ public class WildyQoLPlugin extends Plugin
         log.debug("Friends Chat Cache enabled: {}", config.enableFcCache());
         
         // Check if we should show update message (but don't show it yet)
-        if (!config.updateMessageShown110())
+        if (!config.updateMessageShown120())
         {
             shouldShowUpdateMessage = true;
         }
@@ -108,7 +108,7 @@ public class WildyQoLPlugin extends Plugin
         if (shouldShowUpdateMessage)
         {
             showUpdateMessage();
-            configManager.setConfiguration("wildyqol", "updateMessageShown110", true);
+            configManager.setConfiguration("wildyqol", "updateMessageShown120", true);
             shouldShowUpdateMessage = false;
         }
     }
@@ -248,7 +248,7 @@ public class WildyQoLPlugin extends Plugin
     {
         chatMessageManager.queue(QueuedMessage.builder()
             .type(ChatMessageType.GAMEMESSAGE)
-            .runeLiteFormattedMessage("<col=00ff00>Wildy QoL v1.1.0:</col> Pet Spell Blocker plugin name changed to \"Wildy QoL\" with added feature: Empty Vial Blocker.")
+            .runeLiteFormattedMessage("<col=00cc00>Wildy QoL v1.2.0:</col> Added FC Cache feature! Cache friends-chat players to prevent red player indicators during world hops.")
             .build());
     }
 

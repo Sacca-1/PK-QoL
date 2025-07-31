@@ -31,13 +31,13 @@ public interface WildyQoLConfig extends Config
 	}
 
 	@ConfigItem(
-		keyName = "updateMessageShown110",
-		name = "Update Message Shown v1.1.0",
-		description = "Internal flag to track if the v1.1.0 update message has been shown",
+		keyName = "updateMessageShown120",
+		name = "Update Message Shown v1.2.0",
+		description = "Internal flag to track if the v1.2.0 update message has been shown",
 		hidden = true,
         position = 3
 	)
-	default boolean updateMessageShown110()
+	default boolean updateMessageShown120()
 	{
 		return false;
 	}
@@ -45,12 +45,12 @@ public interface WildyQoLConfig extends Config
 	@ConfigItem(
 		keyName = "enableFcCache",
 		name = "Cache friends-chat players",
-		description = "Treat recently-seen FC members as FC on world hop",
+		description = "Treat recently-seen FC members as FC for player indicators on world hop",
 		position = 4
 	)
 	default boolean enableFcCache()
 	{
-		return false;
+		return true;
 	}
 
 	@ConfigItem(
